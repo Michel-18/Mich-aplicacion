@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Materias</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+</head>
+
+<body class="bg-primary bg-opacity-10">
+
+<div class="container mt-5">
+
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h2 class="fw-bold text-primary">Materias Registradas</h2>
+        </div>
+    </div>
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-8">
+            <form th:action="@{/buscar}" method="get" class="d-flex gap-2">
+                <input type="text" name="criterio"
+                       class="form-control border-primary"
+                       placeholder="Buscar por cualquier campo">
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+                <a th:href="@{/listaMaterias}" class="btn btn-outline-primary">
+                    Ver todo
+                </a>
+            </form>
+        </div>
+
+        <div class="col-md-4 text-end">
+            <a th:href="@{/nueva}" class="btn btn-primary">
+                Nueva materia
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-0 bg-light">
+            <table class="table table-hover table-striped mb-0 text-center align-middle">
+                <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Materia</th>
+                    <th>Profesor</th>
+                    <th>Carrera</th>
+                    <th>Horas</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="m : ${listaMaterias}">
+                    <td th:text="${m.id}" class="fw-semibold"></td>
+                    <td th:text="${m.nombremateria}"></td>
+                    <td th:text="${m.profesor}"></td>
+                    <td th:text="${m.carrera}"></td>
+                    <td th:text="${m.horasSemanales}"></td>
+
+                    <td>
+                        <a th:href="@{/editar/{id}(id=${m.id})}"
+                           class="btn btn-sm btn-outline-primary"
+                           title="Editar">
+                            Editar
+                        </a>
+
+                        <a th:href="@{/eliminar/{id}(id=${m.id})}"
+                           class="btn btn-sm btn-outline-danger"
+                           title="Eliminar"
+                           onclick="return confirm('¿Seguro que deseas eliminar esta materia?');">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(listaMaterias)}">
+                    <td colspan="6" class="text-muted py-4">
+                        No hay materias registradas
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
