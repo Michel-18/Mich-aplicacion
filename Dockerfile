@@ -1,5 +1,19 @@
+# Etapa 1: build con Maven
+FROM eclipse-temurin:25-jdk AS build
+WORKDIR /app
+
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+RUN chmod +x mvnw
+RUN ./mvnw dependency:go-offline
+
+COPY src src
+RUN ./mvnw clean package -DskipTests
+
+# Etapa 2: runtime
 FROM eclipse-temurin:25-jdk
 WORKDIR /app
-COPY target/Mich-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
